@@ -1,37 +1,93 @@
-## Welcome to GitHub Pages
+<!DOCTYPE html>
+<html lang="en">
 
-You can use the [editor on GitHub](https://github.com/nyeinchansoee/MyToDoList/edit/gh-pages/docs/index.md) to maintain and preview the content for your website in Markdown files.
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do List</title>
+</head>
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+<body>
+    <h3>My To Do List</h3>
+    <div class="todo">
+        <div class="add-box" id="addBox">
+            <input type="text" id="input">
+            <button id="addBtn" class="btn btn-add" onclick="addList()">Add</button>
 
-### Markdown
+        </div>
+        <hr>
+        <ul class="list" id="list">
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+        </ul>
+    </div>
+    <script>
+        let minTextLength = 3;
+        let i = 1;
 
-```markdown
-Syntax highlighted code block
+        let input = document.getElementById("input");
+        let list = document.getElementById("list");
 
-# Header 1
-## Header 2
-### Header 3
 
-- Bulleted
-- List
+        function textFilter(x) {
+            if (x) {
+                if (x.length >= minTextLength) {
+                    return x;
 
-1. Numbered
-2. List
+                } else {
+                    alert('Minimun length is three');
+                    return false;
 
-**Bold** and _Italic_ and `Code` text
+                }
+            } else {
+                alert('input test Empty');
+                return false;
 
-[Link](url) and ![Image](src)
-```
+            }
+        }
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+        function showList(text) {
+            list.innerHTML += `
+                <li class="list-item" id="list${i}">
+                    <button class="btn del-btn" onClick="deleteList(${i})" >Delete</button>
+                    <button class="btn edit-btn" onClick="editList(${i})">Edit</button>
+                    <span id="listText${i}">${text}</span>
+                </li> 
+                `;
+            i++;
+        }
 
-### Jekyll Themes
+        function deleteList(listId) {
+            let current = document.getElementById(`list${listId}`);
+            let currentText = document.getElementById(`listText${listId}`).innerHTML;
+            let deleteConfirm = confirm(`Are you sure delete list'${currentText}'`);
+            if (deleteConfirm) {
+                list.removeChild(current);
+            } else {
+                console.log("Delete cancel");
+            }
+        }
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/nyeinchansoee/MyToDoList/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+        function editList(listId) {
+            let current = document.getElementById(`listText${listId}`);
+            let newText = prompt("ပြင်ဆင်ရန်", current.innerHTML);
 
-### Support or Contact
+            if (textFilter(newText)) {
+                current.innerHTML = newText;
+            }
+        }
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+        function addList() {
+
+            let inputText = textFilter(input.value); //get
+
+            // console.log(inputText); //set
+            if (inputText) {
+                showList(inputText);
+                input.value = "";
+            }
+        }
+    </script>
+
+</body>
+
+</html>
